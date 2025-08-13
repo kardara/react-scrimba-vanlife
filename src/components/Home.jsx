@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router";
 
 const Home = () => {
   return (
@@ -10,9 +11,12 @@ const Home = () => {
         Add adventure to your life by joining the #vanlife movement. Rent the
         perfect van to make your perfect road trip.
       </p>
-      <button className="p-2 w-80 rounded-sm font-bold bg-[#FF8C38] cursor-pointer">
+      <Link
+        to="/vans"
+        className="p-2 text-center w-80 rounded-sm font-bold bg-[#FF8C38] cursor-pointer"
+      >
         Find your van
-      </button>
+      </Link>
     </div>
   );
 };
