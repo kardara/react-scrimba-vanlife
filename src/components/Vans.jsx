@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router-dom";
 
 const Vans = () => {
   const [vans, setVans] = useState([]);
+  const [searchPrams, setSearchParams] = useSearchParams();
+  const typeFilter = searchPrams.get("type");
+
+  const displayVans = typeFilter
+    ? vans.filter((van) => van.type === typeFilter)
+    : vans;
 
   useEffect(() => {
     fetch("/api/vans")
@@ -14,12 +20,11 @@ const Vans = () => {
     rugged: "bg-[#115E59] text-white",
     luxury: "bg-[#161616] text-white",
   };
-  const vanElements = vans.map((el) => (
+  const vanElements = displayVans.map((el) => (
     <div key={el.id} className="m-2">
       <Link
         to={`/vans/${el.id}`}
-        aria-label={`View details for ${el.name}, 
-                             priced at $${el.price} per day`}
+        aria-label={`View details for ${el.name},priced at $${el.price} per day`}
       >
         <img src={el.imageUrl} alt={`Image of ${el.name}`} />
         <div className="flex justify-between font-bold m-2">
@@ -46,12 +51,17 @@ const Vans = () => {
         <div className="flex gap-5 items-center">
           <div className="flex gap-2 ml-2">
             {button.map((el) => (
-              <button className="bg-[#FFEAD0] cursor-pointer p-3 text-[#4D4D4D] rounded-sm">
+              <button
+                onClick={() => setSearchParams({ type: el.toLowerCase() })}
+                className="bg-[#FFEAD0] cursor-pointer p-3 text-[#4D4D4D] rounded-sm"
+              >
                 {el}
               </button>
             ))}
           </div>
-          <a className="border-b-1 cursor-pointer">Clear filters</a>
+          <Link to="." className="border-b-1 cursor-pointer">
+            Clear filters
+          </Link>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3">{vanElements}</div>
